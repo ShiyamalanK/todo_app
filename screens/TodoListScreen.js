@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TodoList from '../components/TodoList';
 import colors from '../constants/colors';
+import MyInput from '../components/MyInput';
 
 export default function TodoListScreen({ route }) {
   const { listId } = route.params;
@@ -43,13 +44,13 @@ export default function TodoListScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="New Task"
+      <MyInput
+        placeholder='New Task'
         value={taskName}
         onChangeText={setTaskName}
+        buttonTitle = 'Add Task'
+        onPress = {addTask}
       />
-      <Button title="Add Task" onPress={addTask} />
       <TodoList tasks={tasks} onToggle={toggleTask} onDelete={deleteTask} />
     </View>
   );
@@ -59,12 +60,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 8,
+    backgroundColor: colors.myWhite,
+    maxWidth: 500
   },
 });

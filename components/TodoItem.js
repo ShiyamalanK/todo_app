@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, CheckBox, Switch} from 'react-native';
+import colors from '../constants/colors';
 // import { CheckBox } from '@react-native-community/checkbox';
 
 export default function TodoItem({ task, onToggle, onDelete }) {
@@ -19,7 +20,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    gap: 10,
+    height:60,
+    marginVertical: 8,
+    paddingRight: 15,
+    borderWidth: 0.3,
+    borderColor: colors.myBlack,
+    borderRadius: 5
   },
   text: {
     flex: 1,

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../constants/colors';
+import MyListItem from '../components/MyListItem';
+import MyInput from '../components/MyInput';
 
 export default function HomeScreen({ navigation }) {
   const [listName, setListName] = useState('');
@@ -27,36 +29,22 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="New List Name"
-            value={listName}
-            onChangeText={setListName}
-          />
-          <Button title="Add List" onPress={addList} 
-          style={styles.addBtn}/>
-      </View>
-      <FlatList
-        data={lists}
-        // numColumns={3}
-        renderItem={({ item }) => (
-          <View style={styles.listItem}>
-            {/* <TouchableOpacity 
-            style={styles.listBtn}
-            onPress={() => navigation.navigate('TodoList', { listId: item.id })}
-            >
-                <Text>{item.name}</Text>
-            </TouchableOpacity> */}
-            <Button
-              title={item.name}
-              onPress={() => navigation.navigate('TodoList', { listId: item.id })}
-            />
-            
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
+      <MyInput
+        placeholder = "New List"
+        value = {listName}
+        onChangeText = {setListName}
+        buttonTitle = 'Add List'
+        onPress = {addList}
       />
+      <ScrollView contentContainerStyle={styles.listContainer}>
+        {lists.map(item=>(
+            <View key={item.id} style={styles.listItem}>
+                <MyListItem
+                    title={item.name}
+                    onPress={() => navigation.navigate('TodoList', { listId: item.id })}/>
+            </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -66,36 +54,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.myWhite,
-    maxWidth: 500
-  },
-  inputContainer: {
-    width: '100%',
-    display: 'flex',
+    maxWidth: 500,
+},
+listContainer:{
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    alignItems:'center',
-    gap: 10,
-    marginBottom: 30
-  },
-  input: {
-    height: 40,
-    width: 270,
-    borderColor: 'gray',
-    borderWidth: 1,
-    // marginBottom: 10,
-    paddingHorizontal: 8,
-  },
-  addBtn:{
-    height: 40
-  },
-  listItem: {
-    marginBottom: 10,
-
-  },
-  listBtn:{
-    height: 100,
-    width: 100,
-    backgroundColor: colors.myBlue
-  }
+},
+listItem:{
+    width: '48%',
+}
+  
 });
 
