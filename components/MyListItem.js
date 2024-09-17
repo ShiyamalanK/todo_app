@@ -17,7 +17,9 @@ export default function MyListItem(props) {
             onPress = {props.onPress}
             onLongPress={props.onEdit}
         >
-            <Text style={styles.MyListItemText}>{props.title.length > 50 ? `${props.title.substring(0,48)}...` : props.title}</Text>
+            <Text style={styles.MyListItemText}>
+                {props.title.length > 50 ? `${props.title.substring(0,48)}...` : props.title}
+            </Text>
         </TouchableOpacity>
         <TouchableOpacity 
            onPress={props.onDelete}>

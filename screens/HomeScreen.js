@@ -6,9 +6,14 @@ import { colors , colorList} from '../constants/colors';
 import MyListItem from '../components/MyListItem';
 import MyInput from '../components/MyInput';
 
+import CustomInputDialog from '../components/CustomInputDialog';
+
 export default function HomeScreen({ navigation }) {
   const [listName, setListName] = useState('');
   const [lists, setLists] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentListId, setCurrentListId] = useState(null);
+  const [currentName, setCurrentName] = useState('');
 
   const addList = async () => {
     if (listName.trim() === '') return;
@@ -34,7 +39,7 @@ export default function HomeScreen({ navigation }) {
     await saveData('lists', JSON.stringify(updatedLists));
   };
 
-  const handleLongPress = (id) => {
+  const handleDelete = (id) => {
     Alert.alert(
       'Delete List',
       'Are you sure you want to delete this list?',
@@ -51,36 +56,26 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  const handleEdit = (id) => {
-    const listToEdit = lists.find(list => list.id === id);
-    if (!listToEdit) return;
-  
-    Alert.prompt(
-      'Edit List',
-      'Enter new list name:',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Save',
-          onPress: (newName) => {
-            if (newName.trim() === '') return; // Avoid saving empty names
-            const updatedLists = lists.map(list => {
-              if (list.id === id) {
-                return { ...list, name: newName };
-              }
-              return list;
-            });
-            setLists(updatedLists);
-            AsyncStorage.setItem('lists', JSON.stringify(updatedLists));
-          },
-        },
-      ],
-      'plain-text',
-      listToEdit.name
-    );
+  const handleEdit = (id, name) => {
+    setCurrentListId(id);
+    setCurrentName(name);
+    setModalVisible(true);
+  };
+
+  const handleSaveEdit = async (newName) => {
+    if (newName.trim() === '') return; // Avoid saving empty names
+
+    const updatedLists = lists.map(list => {
+      if (list.id === currentListId) {
+        return { ...list, name: newName };
+      }
+      return list;
+    });
+
+    setLists(updatedLists);
+    await saveData('lists', JSON.stringify(updatedLists));
+    setModalVisible(false);
+    setCurrentListId(null);
   };
 
   return (
@@ -98,13 +93,20 @@ export default function HomeScreen({ navigation }) {
                 <MyListItem
                     title={item.name}
                     onPress={() => navigation.navigate('TodoList', { listId: item.id })}
-                    onDelete={() => handleLongPress(item.id)}
-                    onEdit={() => handleEdit(item.id)}
+                    onDelete={() => handleDelete(item.id)}
+                    onEdit={() => handleEdit(item.id, item.name)}
                     index={lists.indexOf(item)}
-                    />
+                />
             </View>
         ))}
       </ScrollView>
+      {/* Custom input dialog */}
+      <CustomInputDialog
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSaveEdit}
+        initialValue={currentName}
+      />
     </View>
   );
 }

@@ -6,11 +6,16 @@ import TodoList from '../components/TodoList';
 import { colors , colorList} from '../constants/colors';
 import MyInput from '../components/MyInput';
 
+import CustomInputDialog from '../components/CustomInputDialog';
+
 export default function TodoListScreen({ route }) {
   const { listId } = route.params;
   const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState('');
-  const [listName, setListName] = useState('a');
+  const [listName, setListName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
+  const [currentName, setCurrentName] = useState('');
 
   const addTask = async () => {
     if (taskName.trim() === '') return;
@@ -64,8 +69,30 @@ export default function TodoListScreen({ route }) {
 
   const loadListName = async () => {
     const lists = await loadData('lists');
-    const savedListName = JSON.parse(lists).find(list => list.id === listId)?.name;
+    const savedListName = JSON.parse(lists).find(list => list.id == listId)?.name;
     if (savedListName) setListName(savedListName);
+  };
+
+  const handleEdit = (id, name) => {
+    setCurrentTaskId(id);
+    setCurrentName(name);
+    setModalVisible(true);
+  };
+
+  const handleSaveEdit = async (newName) => {
+    if (newName.trim() === '') return; // Avoid saving empty names
+
+    const updatedLists = tasks.map(task => {
+      if (task.id === currentTaskId) {
+        return { ...task, name: newName };
+      }
+      return task;
+    });
+
+    setTasks(updatedLists);
+    await saveData('tasks', JSON.stringify(updatedLists));
+    setModalVisible(false);
+    setCurrentListId(null);
   };
 
 
@@ -83,7 +110,14 @@ export default function TodoListScreen({ route }) {
         tasks={tasks} 
         onToggle={toggleTask} 
         onDelete={handleDeleteTask} 
-      
+        onEdit={handleEdit}
+      />
+      {/* Custom input dialog */}
+      <CustomInputDialog
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSaveEdit}
+        initialValue={currentName}
       />
     </View>
   );

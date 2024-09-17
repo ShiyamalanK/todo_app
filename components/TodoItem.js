@@ -6,9 +6,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const colorKeys = Object.keys(listColors);
 const colorArray = colorKeys.map(key => listColors[key]);
-export default function TodoItem({ task, onToggle, onDelete, index }) {
+export default function TodoItem({ task, onToggle, onDelete, index, onEdit }) {
   return (
-    <View style={[styles.container, {backgroundColor: getBackgroundColor(index)}]}>
+    <View 
+      style={[styles.container, {backgroundColor: getBackgroundColor(index)}]}    
+    >
       <Switch
         value={task.completed}
         onValueChange={onToggle}
@@ -16,7 +18,17 @@ export default function TodoItem({ task, onToggle, onDelete, index }) {
         trackColor={{false: colors.myTrackColor, true: colors.myTrackColor}}
         thumbColor={colors.mySwitchThumbColor}
       />
-      <Text style={[styles.text, task.completed && styles.completed]}>{task.name.length > 50 ? `${task.name.substring(0,48)}...` : task.name}</Text>
+      <TouchableOpacity
+        onLongPress={onEdit}
+        onPress={onToggle}
+        style={styles.textBtn}
+      >
+        <Text
+          style={[styles.text, task.completed && styles.completed]}
+          >
+            {task.name.length > 50 ? `${task.name.substring(0,48)}...` : task.name}
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onDelete}>
         {/* <Text style={styles.delete}>DELETE</Text> */}
         <Icon name="delete" size={24} color={colors.myWhite} />
@@ -26,35 +38,10 @@ export default function TodoItem({ task, onToggle, onDelete, index }) {
 }
 
 const getBackgroundColor = (index) => {
-  console.log(index);
   return colorArray[index % colorArray.length];
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   gap: 10,
-  //   height:60,
-  //   marginVertical: 8,
-  //   paddingRight: 15,
-  //   borderWidth: 0.3,
-  //   borderColor: colors.myBlack,
-  //   borderRadius: 5
-  // },
-  // text: {
-  //   flex: 1,
-  //   fontSize: 18,
-  // },
-  // completed: {
-  //   textDecorationLine: 'line-through',
-  // },
-  // delete: {
-  //   color: 'red',
-  //   marginLeft: 10,
-  //   fontWeight: 'bold'
-  // },
   container:{
     display: 'flex',
     flexDirection: 'row',
@@ -67,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    flex: 1,
+    // flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.myWhite
@@ -80,6 +67,12 @@ const styles = StyleSheet.create({
     color: 'red',
     marginLeft: 10,
     fontWeight: 'bold'
+  },
+  textBtn:{
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 10,
   },
   switch: {
     
