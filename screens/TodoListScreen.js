@@ -3,7 +3,7 @@ import { View, Alert, Text, Button, TextInput, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveData, loadData } from '../utils/storage';
 import TodoList from '../components/TodoList';
-import colors from '../constants/colors';
+import { colors , colorList} from '../constants/colors';
 import MyInput from '../components/MyInput';
 
 export default function TodoListScreen({ route }) {
@@ -62,16 +62,16 @@ export default function TodoListScreen({ route }) {
     );
   };
 
-  // get list name from listId
   const loadListName = async () => {
-    const savedListName = await loadData(`list_${listId}`);
+    const lists = await loadData('lists');
+    const savedListName = JSON.parse(lists).find(list => list.id === listId)?.name;
     if (savedListName) setListName(savedListName);
   };
 
 
   return (
     <View style={styles.container}>
-      <Text>{listId} {listName}</Text>
+      <Text style={styles.listTitle}>{listName}</Text>
       <MyInput
         placeholder='New Task'
         value={taskName}
@@ -79,7 +79,12 @@ export default function TodoListScreen({ route }) {
         buttonTitle = 'Add Task'
         onPress = {addTask}
       />
-      <TodoList tasks={tasks} onToggle={toggleTask} onDelete={handleDeleteTask} />
+      <TodoList 
+        tasks={tasks} 
+        onToggle={toggleTask} 
+        onDelete={handleDeleteTask} 
+      
+      />
     </View>
   );
 }
@@ -91,4 +96,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.myWhite,
     // maxWidth: 500
   },
+  listTitle:{
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.myBlack,
+    paddingHorizontal: 12
+    // marginBottom: 15,
+  }
 });

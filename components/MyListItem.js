@@ -1,17 +1,23 @@
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import colors from '../constants/colors'
+import { colors , colorList} from '../constants/colors';
 
+
+const colorKeys = Object.keys(colorList);
+const colorArray = colorKeys.map(key => colorList[key]);
 export default function MyListItem(props) {
+
+
+
   return (
-    <View style={styles.MyListItemContainer}>
+    <View style={[styles.MyListItemContainer, {backgroundColor: getBackgroundColor(props.index)}]}>
         <TouchableOpacity
             style = {styles.MyListItem}
             onPress = {props.onPress}
             onLongPress={props.onEdit}
         >
-            <Text style={styles.MyListItemText}>{props.title.length > 40 ? `${props.title.substring(0,36)}...` : props.title}</Text>
+            <Text style={styles.MyListItemText}>{props.title.length > 50 ? `${props.title.substring(0,48)}...` : props.title}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
            onPress={props.onDelete}>
@@ -25,6 +31,11 @@ export default function MyListItem(props) {
   )
 }
 
+const getBackgroundColor = (index) => {
+    console.log(index);
+    return colorArray[index % colorArray.length];
+  };
+
 const styles = StyleSheet.create({
     MyListItemContainer:{
       display: 'flex',
@@ -34,7 +45,7 @@ const styles = StyleSheet.create({
       width: '100%',
       minHeight: 100,
       backgroundColor: colors.myBlue,
-      borderRadius: 5,
+      borderRadius: 10,
       paddingHorizontal: 25,
       marginVertical: 5
     },
@@ -50,6 +61,7 @@ const styles = StyleSheet.create({
         
     },
     MyListItemText:{
+        fontSize: 16,
         color: colors.myWhite,
         fontWeight: 'bold',
         // textAlign:'left'

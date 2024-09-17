@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
-import colors from '../constants/colors'
+import { colors , colorList} from '../constants/colors';
+
 
 export default function MyInput(props) {
   return (
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems:'center',
         gap: 10,
-        marginBottom: 30
+        marginVertical: 15
       },
       input: {
         height: 50,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         height: 50,
         backgroundColor: colors.myBlue,
-        padding: 10,
+        padding: 14,
         borderRadius: 5,
         borderColor: colors.myBlack
       },

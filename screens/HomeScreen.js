@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Alert, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveData, loadData } from '../utils/storage';
-import colors from '../constants/colors';
+import { colors , colorList} from '../constants/colors';
 import MyListItem from '../components/MyListItem';
 import MyInput from '../components/MyInput';
 
@@ -99,7 +99,9 @@ export default function HomeScreen({ navigation }) {
                     title={item.name}
                     onPress={() => navigation.navigate('TodoList', { listId: item.id })}
                     onDelete={() => handleLongPress(item.id)}
-                    onEdit={() => handleEdit(item.id)}/>
+                    onEdit={() => handleEdit(item.id)}
+                    index={lists.indexOf(item)}
+                    />
             </View>
         ))}
       </ScrollView>

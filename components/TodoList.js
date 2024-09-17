@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import TodoItem from './TodoItem';
-import colors from '../constants/colors';
+import { colors , colorList} from '../constants/colors';
 
 export default function TodoList({ tasks, onToggle, onDelete }) {
   return (
@@ -13,6 +13,7 @@ export default function TodoList({ tasks, onToggle, onDelete }) {
             task={item}
             onToggle={() => onToggle(item.id)}
             onDelete={() => onDelete(item.id)}
+            index = {tasks.indexOf(item)}
           />
         )}
         keyExtractor={(item) => item.id}
