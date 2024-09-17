@@ -92,7 +92,7 @@ export default function TodoListScreen({ route }) {
     setTasks(updatedLists);
     await saveData('tasks', JSON.stringify(updatedLists));
     setModalVisible(false);
-    setCurrentListId(null);
+    setCurrentTaskId(null);
   };
 
 
