@@ -6,7 +6,6 @@ export default function CustomInputDialog({ visible, onClose, onSave, initialVal
   const [inputValue, setInputValue] = useState(initialValue || '');
   useEffect(() => {
     setInputValue(initialValue || '');
-    console.log(initialValue);
   }, [visible ]);
 
   const handleSave = () => {

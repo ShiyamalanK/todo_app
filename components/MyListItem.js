@@ -30,7 +30,6 @@ export default function MyListItem(props) {
 }
 
 const getBackgroundColor = (index) => {
-    console.log(index);
     return colorArray[index % colorArray.length];
   };
 
@@ -51,29 +50,19 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems:'left',
-        // height: 100,
-        // minWidth: 150,
         width: '70%',
-        marginVertical: 5,
-        // padding: 20,
-        
+        marginVertical: 5,        
     },
     MyListItemText:{
         fontSize: 16,
         color: colors.myWhite,
         fontWeight: 'bold',
-        // textAlign:'left'
     },
     deleteButton: {
-        // position: 'absolute',
-        // top: -2,
-        // right: -2,
         backgroundColor: colors.myRed, // Adjust color as needed
         borderRadius: 20,
         borderWidth: 1,
         padding: 5,
-        // width: 30,
-        // height: 30,
         justifyContent: 'center',
         alignItems: 'center',
       },
