@@ -20,8 +20,9 @@ export default function CustomInputDialog({ visible, onClose, onSave, initialVal
     <Modal
       transparent={true}
       visible={visible}
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
+      statusBarTranslucent={true}
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
 },
 modalContent: {
     width: '90%',
@@ -60,7 +61,7 @@ modalContent: {
     borderRadius: 10,
     padding: 30,
     alignItems: 'center',
-    borderColor: 'rgba(0, 0, 0, 0.2)',
+    borderColor: 'rgba(0, 0, 0, 0.8)',
     borderWidth: 1,
     borderRadius: 10,
     shadowColor: '#000',
@@ -68,9 +69,9 @@ modalContent: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 10,
   },
   modalTitle: {
     fontSize: 20,
