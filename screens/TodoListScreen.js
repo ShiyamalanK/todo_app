@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Alert, Text, Button, TextInput, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { saveData, loadData } from '../utils/storage';
 import TodoList from '../components/TodoList';
 import colors from '../constants/colors';
 import MyInput from '../components/MyInput';
@@ -9,6 +10,7 @@ export default function TodoListScreen({ route }) {
   const { listId } = route.params;
   const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState('');
+  const [listName, setListName] = useState('a');
 
   const addTask = async () => {
     if (taskName.trim() === '') return;
@@ -16,16 +18,17 @@ export default function TodoListScreen({ route }) {
     const updatedTasks = [...tasks, newTask];
     setTasks(updatedTasks);
     setTaskName('');
-    await AsyncStorage.setItem(`tasks_${listId}`, JSON.stringify(updatedTasks));
+    await saveData(`tasks_${listId}`, JSON.stringify(updatedTasks));
   };
 
   const loadTasks = async () => {
-    const savedTasks = await AsyncStorage.getItem(`tasks_${listId}`);
+    const savedTasks = await loadData(`tasks_${listId}`);
     if (savedTasks) setTasks(JSON.parse(savedTasks));
   };
 
   useEffect(() => {
     loadTasks();
+    loadListName();
   }, []);
 
   const toggleTask = async (taskId) => {
@@ -33,17 +36,42 @@ export default function TodoListScreen({ route }) {
       task.id === taskId ? { ...task, completed: !task.completed } : task
     );
     setTasks(updatedTasks);
-    await AsyncStorage.setItem(`tasks_${listId}`, JSON.stringify(updatedTasks));
+    await saveData(`tasks_${listId}`, JSON.stringify(updatedTasks));
   };
 
   const deleteTask = async (taskId) => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(updatedTasks);
-    await AsyncStorage.setItem(`tasks_${listId}`, JSON.stringify(updatedTasks));
+    await saveData(`tasks_${listId}`, JSON.stringify(updatedTasks));
   };
+
+  const handleDeleteTask = (taskId) => {
+    Alert.alert(
+      'Delete Task',
+      'Are you sure you want to delete this task?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteTask(taskId),
+        },
+      ]
+    );
+  };
+
+  // get list name from listId
+  const loadListName = async () => {
+    const savedListName = await loadData(`list_${listId}`);
+    if (savedListName) setListName(savedListName);
+  };
+
 
   return (
     <View style={styles.container}>
+      <Text>{listId} {listName}</Text>
       <MyInput
         placeholder='New Task'
         value={taskName}
@@ -51,7 +79,7 @@ export default function TodoListScreen({ route }) {
         buttonTitle = 'Add Task'
         onPress = {addTask}
       />
-      <TodoList tasks={tasks} onToggle={toggleTask} onDelete={deleteTask} />
+      <TodoList tasks={tasks} onToggle={toggleTask} onDelete={handleDeleteTask} />
     </View>
   );
 }
@@ -61,6 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.myWhite,
-    maxWidth: 500
+    // maxWidth: 500
   },
 });

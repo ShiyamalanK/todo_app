@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Alert, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { saveData, loadData } from '../utils/storage';
 import colors from '../constants/colors';
 import MyListItem from '../components/MyListItem';
 import MyInput from '../components/MyInput';
@@ -15,17 +16,72 @@ export default function HomeScreen({ navigation }) {
     const updatedLists = [...lists, newList];
     setLists(updatedLists);
     setListName('');
-    await AsyncStorage.setItem('lists', JSON.stringify(updatedLists));
+    await saveData('lists', JSON.stringify(updatedLists));
   };
 
   const loadLists = async () => {
-    const savedLists = await AsyncStorage.getItem('lists');
+    const savedLists = await loadData('lists');
     if (savedLists) setLists(JSON.parse(savedLists));
   };
 
   React.useEffect(() => {
     loadLists();
   }, []);
+
+  const deleteList = async (id) => {
+    const updatedLists = lists.filter(item => item.id !== id);
+    setLists(updatedLists);
+    await saveData('lists', JSON.stringify(updatedLists));
+  };
+
+  const handleLongPress = (id) => {
+    Alert.alert(
+      'Delete List',
+      'Are you sure you want to delete this list?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteList(id),
+        },
+      ]
+    );
+  };
+
+  const handleEdit = (id) => {
+    const listToEdit = lists.find(list => list.id === id);
+    if (!listToEdit) return;
+  
+    Alert.prompt(
+      'Edit List',
+      'Enter new list name:',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Save',
+          onPress: (newName) => {
+            if (newName.trim() === '') return; // Avoid saving empty names
+            const updatedLists = lists.map(list => {
+              if (list.id === id) {
+                return { ...list, name: newName };
+              }
+              return list;
+            });
+            setLists(updatedLists);
+            AsyncStorage.setItem('lists', JSON.stringify(updatedLists));
+          },
+        },
+      ],
+      'plain-text',
+      listToEdit.name
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -41,7 +97,9 @@ export default function HomeScreen({ navigation }) {
             <View key={item.id} style={styles.listItem}>
                 <MyListItem
                     title={item.name}
-                    onPress={() => navigation.navigate('TodoList', { listId: item.id })}/>
+                    onPress={() => navigation.navigate('TodoList', { listId: item.id })}
+                    onDelete={() => handleLongPress(item.id)}
+                    onEdit={() => handleEdit(item.id)}/>
             </View>
         ))}
       </ScrollView>
@@ -54,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.myWhite,
-    maxWidth: 500,
+    // maxWidth: 500,
 },
 listContainer:{
     flexDirection: 'row',
@@ -62,7 +120,8 @@ listContainer:{
     justifyContent: 'space-between',
 },
 listItem:{
-    width: '48%',
+  // width: '100%'
+    // width: '48%',
 }
   
 });
