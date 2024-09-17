@@ -18,8 +18,6 @@ export default function MyInput(props) {
           style={styles.addBtn} >
             <Text style={styles.buttonText}>{props.buttonTitle}</Text>
           </TouchableOpacity>
-          {/* <Button title="Add List" onPress={addList} 
-          style={styles.addBtn}/> */}
       </View>
     </View>
   )

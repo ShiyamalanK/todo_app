@@ -14,7 +14,6 @@ export default function TodoItem({ task, onToggle, onDelete, index, onEdit }) {
       <Switch
         value={task.completed}
         onValueChange={onToggle}
-        // style={styles.switch}
         trackColor={{false: colors.myTrackColor, true: colors.myTrackColor}}
         thumbColor={colors.mySwitchThumbColor}
       />
@@ -54,7 +53,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    // flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.myWhite
@@ -74,7 +72,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
-  switch: {
-    
-  }
 });

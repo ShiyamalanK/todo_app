@@ -100,7 +100,6 @@ export default function HomeScreen({ navigation }) {
             </View>
         ))}
       </ScrollView>
-      {/* Custom input dialog */}
       <CustomInputDialog
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -116,17 +115,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.myWhite,
-    // maxWidth: 500,
 },
 listContainer:{
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-},
-listItem:{
-  // width: '100%'
-    // width: '48%',
-}
-  
+}  
 });
 

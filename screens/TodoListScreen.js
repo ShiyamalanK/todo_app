@@ -112,7 +112,6 @@ export default function TodoListScreen({ route }) {
         onDelete={handleDeleteTask} 
         onEdit={handleEdit}
       />
-      {/* Custom input dialog */}
       <CustomInputDialog
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -128,13 +127,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.myWhite,
-    // maxWidth: 500
   },
   listTitle:{
     fontSize: 24,
     fontWeight: 'bold',
     color: colors.myBlack,
     paddingHorizontal: 12
-    // marginBottom: 15,
   }
 });

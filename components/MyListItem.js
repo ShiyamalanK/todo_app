@@ -25,10 +25,6 @@ export default function MyListItem(props) {
            onPress={props.onDelete}>
             <Icon name="delete" size={24} color={colors.myWhite} />
         </TouchableOpacity>
-        {/* <TouchableOpacity 
-           onPress={props.onEdit}>
-            <Icon name="edit" size={24} color={colors.myWhite} />
-        </TouchableOpacity> */}
     </View>
   )
 }

@@ -8,23 +8,16 @@ const colors = {
     myTrackColor: '#FFFFFF',
     mySwitchThumbColor: '#03A678',
 
-
-
     myBgColor: '#003840'
 }
 
 const colorList = {
-    // Colors
     color1: '#003840',
     color2: '#005A5B',
-    // color3: '#007369',
-    // color4: '#008C72'
 }
 
 const listColors = {
-    // Colors
     c1: '#003840',
-    // c2: '#005A5B',
     c3: '#014040'
 }
 
