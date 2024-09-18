@@ -14,5 +14,23 @@ export const loadData = async (key) => {
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error('Failed to load data:', e);
+    return null;
+  }
+};
+
+export const removeData = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (e) {
+    console.error('Failed to remove data:', e);
+  }
+};
+
+export const getAllKeys = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    return keys;
+  } catch (e) {
+    console.error('Failed to get all keys:', e);
   }
 };

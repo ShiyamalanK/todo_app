@@ -7,9 +7,6 @@ import { colors , colorList} from '../constants/colors';
 const colorKeys = Object.keys(colorList);
 const colorArray = colorKeys.map(key => colorList[key]);
 export default function MyListItem(props) {
-
-
-
   return (
     <View style={[styles.MyListItemContainer, {backgroundColor: getBackgroundColor(props.index)}]}>
         <TouchableOpacity
